@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icones">
+        <file alias="quitter">mesIcones/iconQuitter.png</file>
+        <file alias="valider">mesIcones/iconValider.png</file>
+    </qresource>
+</RCC>
