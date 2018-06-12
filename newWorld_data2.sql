@@ -80,7 +80,7 @@ INSERT INTO produit VALUES(13, 'Porc', 'img/produit/porc', 1, '', 2);
 --
 
 INSERT INTO variete VALUES(1, 'Golden', 'Idéale pour la cuisine', 1, '/home/kcourtial/Github/NewWorld/AppliPDF/cataloguePDF/catalogueNWpdf/golden.jpg',1.0,1);
-INSERT INTO variete VALUES(2, 'Gala', 'Idéale pour se désaltérer', 1, '/home/kcourtial/Github/NewWorld/AppliPDF/cataloguePDF/catalogueNWpdf/gala.jpg',0.8, 1);
+INSERT INTO variete VALUES(2, 'Gala', 'Idéale pour se désaltérer', 0, '/home/kcourtial/Github/NewWorld/AppliPDF/cataloguePDF/catalogueNWpdf/gala.jpg',0.8, 1);
 INSERT INTO variete VALUES(3, 'Reinette grise', 'Un goût acidulé', 1, '/home/kcourtial/Github/NewWorld/AppliPDF/cataloguePDF/catalogueNWpdf/reinete.jpg',0.5, 1);
 INSERT INTO variete VALUES(4, 'Truite', 'A cuisiner en sauce', 1, '/home/kcourtial/Github/NewWorld/AppliPDF/cataloguePDF/catalogueNWpdf/truite.jpeg',4.0,11);
 

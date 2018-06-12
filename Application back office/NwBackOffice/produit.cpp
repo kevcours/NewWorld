@@ -31,14 +31,14 @@ void Produit::chargeListeProduit()
 {
     ui->tableWidgetListProduit->clearContents();
     ui->tableWidgetListProduit->setRowCount(0);
-    QString txtRequete="select libelleproduit ,numeroproduit from produit where Accept";
+    QString txtRequete="select libelleVariete ,idVariete from variete where Accept";
     QSqlQuery maRequete(txtRequete);
     while(maRequete.next())
         {
             int nbLigne=ui->tableWidgetListProduit->rowCount();
             ui->tableWidgetListProduit->setRowCount(nbLigne+1);
-            ui->tableWidgetListProduit->setItem(nbLigne,0,new QTableWidgetItem(maRequete.value("numeroproduit").toString()));
-            ui->tableWidgetListProduit->setItem(nbLigne,1,new QTableWidgetItem(maRequete.value("libelleproduit").toString()));
+            ui->tableWidgetListProduit->setItem(nbLigne,0,new QTableWidgetItem(maRequete.value("idVariete").toString()));
+            ui->tableWidgetListProduit->setItem(nbLigne,1,new QTableWidgetItem(maRequete.value("libelleVariete").toString()));
         }
 }
 
@@ -47,11 +47,7 @@ void Produit::ChangementConstruct()
     chargeID();
     chargeListeProduit();
     chargeTableauDemande();
-    ChargementDuComboBoxRayon();
     ChargementDuComboBoxType();
-    ChargementDuComboBoxMesure();
-    ChargementDuComboBoxProducteur();
-    ChargementDuComboBoxLot();
 }
 
 void Produit::chargeTableauDemande()
@@ -59,23 +55,22 @@ void Produit::chargeTableauDemande()
     ui->tableWidgetDemandeProduit->clearContents();
     ui->tableWidgetDemandeProduit->setRowCount(0);
 
-    QString txtRequete="select numeroproduit,libelleproduit,prixU,mesure,numerocharacteristique,numerolot,iDProducteur,numerorayon from produit where not Accept";
+    QString txtRequete="select idVariete,libelleVariete, puVariete,descVariete,photo,idProduit from variete where not accept";
     QSqlQuery maRequete(txtRequete);
     while(maRequete.next())
     {
         QCheckBox* valider= new QCheckBox("Valider",ui->tableWidgetDemandeProduit);
+        valider->setProperty("noVariete",maRequete.value("idVariete").toString());
         connect(valider,SIGNAL(stateChanged(int)),this,SLOT(validerDemande(int)));
         int nbLigne=ui->tableWidgetDemandeProduit->rowCount();
         ui->tableWidgetDemandeProduit->setRowCount(nbLigne+1);
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,0,new QTableWidgetItem(maRequete.value("numeroproduit").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,1,new QTableWidgetItem(maRequete.value("libelleproduit").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,2,new QTableWidgetItem(maRequete.value("prixU").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,3,new QTableWidgetItem(maRequete.value("mesure").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,4,new QTableWidgetItem(maRequete.value("numerocharacteristique").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,5,new QTableWidgetItem(maRequete.value("numerolot").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,6,new QTableWidgetItem(maRequete.value("iDProducteur").toString()));
-        ui->tableWidgetDemandeProduit->setItem(nbLigne,7,new QTableWidgetItem(maRequete.value("numerorayon").toString()));
-        ui->tableWidgetDemandeProduit->setCellWidget(nbLigne,8,valider);
+        ui->tableWidgetDemandeProduit->setItem(nbLigne,0,new QTableWidgetItem(maRequete.value("idVariete").toString()));
+        ui->tableWidgetDemandeProduit->setItem(nbLigne,1,new QTableWidgetItem(maRequete.value("libelleVariete").toString()));
+        ui->tableWidgetDemandeProduit->setItem(nbLigne,2,new QTableWidgetItem(maRequete.value("descVariete").toString()));
+        ui->tableWidgetDemandeProduit->setItem(nbLigne,3,new QTableWidgetItem(maRequete.value("photo").toString()));
+        ui->tableWidgetDemandeProduit->setItem(nbLigne,4,new QTableWidgetItem(maRequete.value("puVariete").toString()));
+        ui->tableWidgetDemandeProduit->setItem(nbLigne,5,new QTableWidgetItem(maRequete.value("idProduit").toString()));
+        ui->tableWidgetDemandeProduit->setCellWidget(nbLigne,6,valider);
 
     }
 
@@ -84,15 +79,16 @@ void Produit::chargeTableauDemande()
 
 }
 
-void Produit::validerDemande(int cocher)
+void Produit::validerDemande(int etat)
 {
-    int ligne;
-    if (cocher==Qt::Checked)
+
+    if (etat==Qt::Checked)
     {
-      for ( int noLigne ; noLigne<ui->tableWidgetDemandeProduit->rowCount() ; noLigne++)
-      {
-          //if(ui->tableWidgetDemandeProduit->item(noLigne,8)->is)
-      }
+        QString noVariete= ((QCheckBox*)sender())->property("noVariete").toString();
+        QString text="update variete set accept=true where idVariete=\""+noVariete+"\"";
+        QSqlQuery maRequete(text);
+        chargeTableauDemande();
+        chargeListeProduit();
 
     }
 
@@ -103,55 +99,19 @@ void Produit::on_pushButtonProduitQuitter_clicked()
     reject();
 }
 
-void Produit::ChargementDuComboBoxRayon()
-{
-    QString txt="select type , numerorayon from rayon where accept";
-    QSqlQuery maRequete(txt);
-    while(maRequete.next())
-    {
-        ui->comboBoxRayon->addItem(maRequete.value("type").toString(),maRequete.value("numerorayon").toString());
-    }
-}
 
 void Produit::ChargementDuComboBoxType()
 {
-    QString txt="select libellecharacteristique, numerocharacteristique from characteristique where accept";
+    QString txt="select libelleProduit, idProduit from produit where accept";
     QSqlQuery maRequete(txt);
     while(maRequete.next())
     {
-        ui->comboBoxTypeProduit->addItem(maRequete.value("libellecharacteristique").toString(),maRequete.value("numerocharacteristique").toString());
+        ui->comboBoxTypeProduit->addItem(maRequete.value("libelleProduit").toString(),maRequete.value("idProduit").toString());
     }
 }
 
-void Produit::ChargementDuComboBoxMesure()
-{
-    QString txt="select distinct mesure from produit";
-    QSqlQuery maRequete(txt);
-    while(maRequete.next())
-    {
-        ui->comboBoxMesure->addItem(maRequete.value("mesure").toString());
-    }
-}
 
-void Produit::ChargementDuComboBoxProducteur()
-{
-    QString txt="select distinct nomProd , prenomProd,iDProducteur from Producteur";
-    QSqlQuery maRequete(txt);
-    while(maRequete.next())
-    {
-        ui->comboBoxProducteur->addItem(maRequete.value("nomProd").toString()+""+maRequete.value("prenomProd").toString(),maRequete.value("iDProducteur").toString());
-    }
-}
 
-void Produit::ChargementDuComboBoxLot()
-{
-    QString txt="select distinct libellelot , numerolot from lot";
-    QSqlQuery maRequete(txt);
-    while(maRequete.next())
-    {
-        ui->comboBoxLot->addItem(maRequete.value("lot").toString(),maRequete.value("numerolot").toString());
-    }
-}
 
 void Produit::on_pushButtonAjouterProduit_clicked()
 {
@@ -160,11 +120,7 @@ void Produit::on_pushButtonAjouterProduit_clicked()
     maRequete.addBindValue(ui->spinBoxNumProduit->value());
     maRequete.addBindValue(ui->lineEditNomProd->text());
     maRequete.addBindValue(ui->doubleSpinBoxPU->value());
-    maRequete.addBindValue(ui->comboBoxMesure->currentText());
     maRequete.addBindValue(ui->comboBoxTypeProduit->currentData().toString());
-    maRequete.addBindValue(ui->comboBoxLot->currentData().toString());
-    maRequete.addBindValue(ui->comboBoxProducteur->currentData().toString());
-    maRequete.addBindValue(ui->comboBoxRayon->currentData().toString());
     maRequete.exec();
     chargeListeProduit();
     chargeID();

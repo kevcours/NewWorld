@@ -21,9 +21,10 @@ private slots:
     void on_pushButtonAjouterRayon_clicked();
 
     void on_pushButtonEffacerRayon_clicked();
-    void ChargeTableauDemande();
+    void chargeTableauDemande();
 
-    void ChargeID();
+    void chargeID();
+    void validerDemande(int etat);
 private:
     Ui::Rayon *ui;
 };

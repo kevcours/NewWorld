@@ -51,12 +51,12 @@ void MainWindow::chargeTableauDemande()
     QString nbDemandeProduit;
     QString nbDemandeRayon;
     QString nbDemandeTypeProduit;
-    QString sectionProduit="Produit";
+    QString sectionProduit="Variete";
     QString sectionRayon="Rayon";
-    QString sectionTypeProduit="Type Produit";
-    QString txtProduit="select count(*) as nbDemande from produit where not accept";
-    QString txtRayon="select count(*) as nbDemande from rayon where not accept";
-    QString txtTypeProduit="select count(*) as nbDemande from characteristique where not accept";
+    QString sectionTypeProduit="Produit";
+    QString txtProduit="select count(*) as nbDemande from variete where not accept";
+    QString txtRayon="select count(idRayon) as nbDemande from rayon where not accept";
+    QString txtTypeProduit="select count(*) as nbDemande from produit where not accept";
     QSqlQuery nbRequeteProduit(txtProduit);
     nbRequeteProduit.next();
     nbDemandeProduit= nbRequeteProduit.value("nbDemande").toString();
@@ -103,3 +103,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 
+
+void MainWindow::on_action_Quitter_triggered()
+{
+    this->close();
+}

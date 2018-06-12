@@ -4,7 +4,7 @@
 #include <QSqlTableModel> // nécessaire pour utiliser un QSqlTableModel
 #include <QMessageBox> // nécessaire pour utiliser un QMessageBox
 #include <QSqlQuery>
-#include<QDebug>
+#include <QDebug>
 
 login::login(QWidget *parent) :
     QDialog(parent),
@@ -22,12 +22,10 @@ login::~login()
 
 void login::on_pushButtonValider_clicked()
 {
-    QString monTexte="select EmployeId from Employe where EmployeLogin='"+ui->lineEditLogin->text()+"' and EmployeMdp='"+ui->lineEditPassword->text()+"'";
+    QString monTexte="select employeId from Employe where employeLogin=\""+ui->lineEditLogin->text()+"\" and employeMdp=\""+ui->lineEditPassword->text()+"\"";
+    qDebug()<<monTexte;
     QSqlQuery maRequete(monTexte);
-
-    maRequete.next();
-    qDebug()<<maRequete.value("EmployeId");
-    if (maRequete.value("EmployeId")!="")
+    if (maRequete.next())
     {
         MyLog=ui->lineEditLogin->text();
         accept();
@@ -76,7 +74,6 @@ void login::ajoutConstruct()
     //a effacer juste pour ce loger directement
     ui->lineEditLogin->setText("k");
     ui->lineEditPassword->setText("k");
-    on_pushButtonValider_clicked();
     // vrai ajout au constructeur
     ui->labelErreurIcon->hide();
     ui->labelErreurText->hide();

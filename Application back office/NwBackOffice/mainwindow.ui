@@ -91,7 +91,7 @@
           <item>
            <widget class="QPushButton" name="pushButtonProduit">
             <property name="text">
-             <string>Produit</string>
+             <string>Variété</string>
             </property>
             <property name="icon">
              <iconset resource="nWBackOffice.qrc">
@@ -143,7 +143,7 @@
           <item>
            <widget class="QPushButton" name="pushButtonTypeProduits">
             <property name="text">
-             <string>Type Produits</string>
+             <string> Produits</string>
             </property>
             <property name="icon">
              <iconset resource="nWBackOffice.qrc">
@@ -258,6 +258,7 @@
     <property name="title">
      <string>&amp;Fichier</string>
     </property>
+    <addaction name="action_Quitter"/>
    </widget>
    <addaction name="menuFichier"/>
   </widget>
@@ -273,6 +274,11 @@
   <action name="action_Deconnection">
    <property name="text">
     <string>&amp;Deconnection</string>
+   </property>
+  </action>
+  <action name="action_Quitter">
+   <property name="text">
+    <string>&amp;Quitter</string>
    </property>
   </action>
  </widget>

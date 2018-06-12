@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "login.h"
-
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
@@ -12,14 +12,19 @@ int main(int argc, char *argv[])
     maBase.setDatabaseName("dbKCnw");
     maBase.setUserName("Kevin");
     maBase.setPassword("ddxx2rcep");
-    maBase.open();
-    login MesLog;
-    if(MesLog.exec()==QDialog::Accepted)
-    {
-        MainWindow w;
-        w.show();
 
-        return a.exec();
-     }
+
+    if (maBase.open())
+    {
+
+        login MesLog;
+        if(MesLog.exec()==QDialog::Accepted)
+        {
+            MainWindow w;
+            w.show();
+
+            return a.exec();
+         }
+    }
     maBase.close();
 }

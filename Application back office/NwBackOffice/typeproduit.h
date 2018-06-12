@@ -33,6 +33,8 @@ private slots:
 
     void chargeId();
 
+    void validerDemande(int etat);
+
 private:
     Ui::TypeProduit *ui;
 };

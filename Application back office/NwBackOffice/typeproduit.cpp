@@ -24,7 +24,7 @@ void TypeProduit::on_pushButtonTypeProduitQuitter_clicked()
 
 void TypeProduit::on_pushButtonAjouterTypeProd_clicked()
 {
-    QString txtRequete="insert into characteristique values(?,?,?,?,?,1)";
+    QString txtRequete="insert into produit values(?,?,?,?,1,?)";
     QSqlQuery maRequete(txtRequete);
     QString photo="";
     if(ui->lineEditPhotoTypesProd->text().isEmpty())
@@ -37,7 +37,7 @@ void TypeProduit::on_pushButtonAjouterTypeProd_clicked()
         maRequete.addBindValue(ui->lineEditNomTypeprod->text());
         maRequete.addBindValue(ui->plainTextEditInfo->toPlainText());
         maRequete.addBindValue(ui->lineEditPhotoTypesProd->text());
-        maRequete.addBindValue(ui->comboBoxModeProd->currentData());
+        maRequete.addBindValue(ui->comboBoxRayon->currentData());
         maRequete.exec();
         chargeListTypeProduit();
         chargeId();
@@ -52,7 +52,7 @@ void TypeProduit::on_pushButtonAjouterTypeProd_clicked()
         maRequete.addBindValue(ui->lineEditNomTypeprod->text());
         maRequete.addBindValue(ui->plainTextEditInfo->toPlainText());
         maRequete.addBindValue(photo);
-        maRequete.addBindValue(ui->comboBoxModeProd->currentData());
+        maRequete.addBindValue(ui->comboBoxRayon->currentData());
         maRequete.exec();
         chargeListTypeProduit();
         chargeId();
@@ -66,7 +66,7 @@ void TypeProduit::on_pushButtonAjouterTypeProd_clicked()
 void TypeProduit::chargeListTypeProduit()
 {
     ui->listWidgetTypeProd->clear();
-    QString txtRequete="select libellecharacteristique from characteristique where accept ";
+    QString txtRequete="select libelleProduit from produit where accept ";
     QSqlQuery maRequete(txtRequete);
     while(maRequete.next())
         {
@@ -79,19 +79,20 @@ void TypeProduit::chargeTableauDemande()
     ui->tableWidgetTypesPRod->clearContents();
     ui->tableWidgetTypesPRod->setRowCount(0);
 
-    QString txtRequete="select numerocharacteristique,libellecharacteristique,info,photo,mode_de_Prod from characteristique where not Accept";
+    QString txtRequete="select idProduit,libelleProduit,descProduit,photoProduit,idRayon from produit where not accept";
     QSqlQuery maRequete(txtRequete);
     while(maRequete.next())
     {
         QCheckBox* valider= new QCheckBox("Valider",ui->tableWidgetTypesPRod);
         connect(valider,SIGNAL(stateChanged(int)),this,SLOT(validerDemande(int)));
+        valider->setProperty("noProduit",maRequete.value("idProduit").toString());
         int nbLigne=ui->tableWidgetTypesPRod->rowCount();
         ui->tableWidgetTypesPRod->setRowCount(nbLigne+1);
-        ui->tableWidgetTypesPRod->setItem(nbLigne,0,new QTableWidgetItem(maRequete.value("numerocharacteristique").toString()));
-        ui->tableWidgetTypesPRod->setItem(nbLigne,1,new QTableWidgetItem(maRequete.value("libellecharacteristique").toString()));
-        ui->tableWidgetTypesPRod->setItem(nbLigne,2,new QTableWidgetItem(maRequete.value("photo").toString()));
-        ui->tableWidgetTypesPRod->setItem(nbLigne,3,new QTableWidgetItem(maRequete.value("info").toString()));
-        ui->tableWidgetTypesPRod->setItem(nbLigne,4,new QTableWidgetItem(maRequete.value("mode_de_Prod").toString()));
+        ui->tableWidgetTypesPRod->setItem(nbLigne,0,new QTableWidgetItem(maRequete.value("idProduit").toString()));
+        ui->tableWidgetTypesPRod->setItem(nbLigne,1,new QTableWidgetItem(maRequete.value("libelleProduit").toString()));
+        ui->tableWidgetTypesPRod->setItem(nbLigne,2,new QTableWidgetItem(maRequete.value("photoProduit").toString()));
+        ui->tableWidgetTypesPRod->setItem(nbLigne,3,new QTableWidgetItem(maRequete.value("descProduit").toString()));
+        ui->tableWidgetTypesPRod->setItem(nbLigne,4,new QTableWidgetItem(maRequete.value("idRayon").toString()));
         ui->tableWidgetTypesPRod->setCellWidget(nbLigne,5,valider);
 
     }
@@ -107,11 +108,11 @@ void TypeProduit::inTheConstructor()
 
 void TypeProduit::chargeComboBoxMDP()
 {
-    QString txt="select distinct libellemodeProd, numeromodeProd from modeProd";
+    QString txt="select distinct libelleRayon, idRayon from rayon where accept";
     QSqlQuery maRequete(txt);
     while(maRequete.next())
     {
-        ui->comboBoxModeProd->addItem(maRequete.value("libellemodeProd").toString(),maRequete.value("numeromodeProd").toString());
+        ui->comboBoxRayon->addItem(maRequete.value("libelleRayon").toString(),maRequete.value("idRayon").toString());
     }
 }
 
@@ -119,7 +120,7 @@ void TypeProduit::chargeComboBoxMDP()
 
 void TypeProduit::on_pushButton_clicked()
 {
-    QString txtRequete="delete from characteristique where libellecharacteristique=?";
+    QString txtRequete="delete from produit where libelleProduit=?";
     QSqlQuery maRequete(txtRequete);
     QString typeSelectionner;
     for (int notype =0 ; notype<ui->listWidgetTypeProd->count() ; notype++)
@@ -132,7 +133,7 @@ void TypeProduit::on_pushButton_clicked()
     maRequete.addBindValue(typeSelectionner);
     if(maRequete.exec()==false)
     {
-        QMessageBox::warning(this,"error","La requete n'as pas put etre executer, atention il y a peut etre un produit lier au type .");
+        QMessageBox::warning(this,"error","La requete n'as pas put etre executer, atention il y a peut etre une variétée lier au produit  .");
     }
 
     chargeListTypeProduit();
@@ -140,9 +141,21 @@ void TypeProduit::on_pushButton_clicked()
 
 void TypeProduit::chargeId()
 {
-    QString txt="select MAX(numerocharacteristique) max from characteristique";
+    QString txt="select MAX(idProduit) max from produit";
     QSqlQuery maRequete(txt);
     maRequete.next();
     int idMax=maRequete.value("max").toInt()+1;
     ui->spinBoxNum->setValue(idMax);
+}
+
+void TypeProduit::validerDemande(int etat)
+{
+    if (etat==Qt::Checked)
+    {
+      QString noProduit= ((QCheckBox*)sender())->property("noProduit").toString();
+      QString text="update produit set accept=true where idProduit=\""+noProduit+"\"";
+      QSqlQuery maRequete(text);
+      chargeTableauDemande();
+      chargeListTypeProduit();
+    }
 }

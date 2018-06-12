@@ -27,6 +27,8 @@ private slots:
 
     void chargeTableauDemande();
 
+    void on_action_Quitter_triggered();
+
 private:
     Ui::MainWindow *ui;
     void closeEvent(QCloseEvent *event);

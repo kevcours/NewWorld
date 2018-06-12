@@ -20,13 +20,9 @@ private slots:
     void chargeListeProduit();
     void ChangementConstruct();
     void chargeTableauDemande();
-    void validerDemande(int cocher);
+    void validerDemande(int etat);
     void on_pushButtonProduitQuitter_clicked();
-    void ChargementDuComboBoxRayon();
     void ChargementDuComboBoxType();
-    void ChargementDuComboBoxMesure();
-    void ChargementDuComboBoxProducteur();
-    void ChargementDuComboBoxLot();
 
     void on_pushButtonAjouterProduit_clicked();
 
