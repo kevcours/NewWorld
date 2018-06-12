@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/icones">
+        <file>corbeille.png</file>
+        <file>modifier.png</file>
+        <file>ajouter.png</file>
+        <file>Attention.png</file>
+        <file>Valider.png</file>
+        <file>Annuler.png</file>
+        <file alias="utilisateurIcone">user.ico</file>
+        <file alias="verrouIcone">lock.ico</file>
+        <file alias="lockeuser">lock.png</file>
+        <file alias="imageuser">user.png</file>
+        <file>icon_livraison.png</file>
+        <file>fermer.png</file>
+    </qresource>
+</RCC>

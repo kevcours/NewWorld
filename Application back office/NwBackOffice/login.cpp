@@ -4,6 +4,7 @@
 #include <QSqlTableModel> // nécessaire pour utiliser un QSqlTableModel
 #include <QMessageBox> // nécessaire pour utiliser un QMessageBox
 #include <QSqlQuery>
+#include<QDebug>
 
 login::login(QWidget *parent) :
     QDialog(parent),
@@ -24,8 +25,9 @@ void login::on_pushButtonValider_clicked()
     QString monTexte="select EmployeId from Employe where EmployeLogin='"+ui->lineEditLogin->text()+"' and EmployeMdp='"+ui->lineEditPassword->text()+"'";
     QSqlQuery maRequete(monTexte);
 
-
-    if (maRequete.numRowsAffected())
+    maRequete.next();
+    qDebug()<<maRequete.value("EmployeId");
+    if (maRequete.value("EmployeId")!="")
     {
         MyLog=ui->lineEditLogin->text();
         accept();
